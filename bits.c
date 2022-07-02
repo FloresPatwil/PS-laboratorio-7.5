@@ -143,6 +143,7 @@ NOTES:
  *   Rating: 1
  */
 int bitXor(int x, int y) {
+  // (x or y) & ~(a and y)
   return ~(~(x & ~y) & ~(~x & y));
 }
 /* 
@@ -152,8 +153,7 @@ int bitXor(int x, int y) {
  *   Rating: 1
  */
 int tmin(void) {
-
-  return 2;
+   return 1 << 31;
 
 }
 //2
@@ -165,7 +165,11 @@ int tmin(void) {
  *   Rating: 1
  */
 int isTmax(int x) {
-  return 2;
+  int i = x+1; 
+  x = x+i;
+  x = ~x;
+  i= !i;
+  x = x+i;
 }
 /* 
  * allOddBits - return 1 if all odd-numbered bits in word set to 1
@@ -176,7 +180,10 @@ int isTmax(int x) {
  *   Rating: 2
  */
 int allOddBits(int x) {
-  return 2;
+  int mask = 0xaa;
+  mask = (mask << 8) | mask;
+  mask = (mask << 16) | mask;
+  return !((x & mask) ^ mask);
 }
 /* 
  * negate - return -x 
