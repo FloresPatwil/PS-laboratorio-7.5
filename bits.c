@@ -193,7 +193,7 @@ int allOddBits(int x) {
  *   Rating: 2
  */
 int negate(int x) {
-  return 2;
+  return ~x + 1;;
 }
 //3
 /* 
@@ -206,7 +206,10 @@ int negate(int x) {
  *   Rating: 3
  */
 int isAsciiDigit(int x) {
-  return 2;
+  int caso_menor = (x +(~0x30 +1))>>31;    //x - minimo, me quedo con el bit de signo
+  int caso_mayor =  (0x39+(~x+1))>>31;     // maximo - x, me quedo con bit de signo
+  int ascii = (!caso_menor & !caso_mayor); //!0 & !0 unico caso que es ascii
+  return  ascii;
 }
 /* 
  * conditional - same as x ? y : z 
