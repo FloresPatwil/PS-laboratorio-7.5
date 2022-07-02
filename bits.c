@@ -231,7 +231,10 @@ int conditional(int x, int y, int z) {
  *   Rating: 3
  */
 int isLessOrEqual(int x, int y) {
-  return 2;
+  int mask = 1 << 31, x_sign = !!(x & mask), y_sign = !!(y & mask), same_sign, le;
+  same_sign = !(x_sign ^ y_sign);
+  le = !((~x + 1 + y) & mask);
+  return (x_sign & !y_sign) | (same_sign & le);;
 }
 //4
 /* 
