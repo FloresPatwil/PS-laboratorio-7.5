@@ -285,7 +285,19 @@ int howManyBits(int x) {
  *   Rating: 4
  */
 unsigned floatScale2(unsigned uf) {
-  return 2;
+  unsigned sign = uf & 0x80000000, exp = uf & 0x7f800000, frac = uf & 0x007fffff;
+    // 0 or denorm
+    if (exp == 0)
+        return sign | uf << 1;
+    // inf or NaN
+    if (exp == 0x7f800000)
+        return uf;
+    // norm
+    exp += 0x00800000;
+    // large number becomes inf
+    if (exp == 0x7f800000)
+        frac = 0;
+    return sign | exp | frac;
 }
 /* 
  * floatFloat2Int - Return bit-level equivalent of expression (int) f
