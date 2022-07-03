@@ -286,15 +286,11 @@ int howManyBits(int x) {
  */
 unsigned floatScale2(unsigned uf) {
   unsigned sign = uf & 0x80000000, exp = uf & 0x7f800000, frac = uf & 0x007fffff;
-    // 0 or denorm
     if (exp == 0)
         return sign | uf << 1;
-    // inf or NaN
     if (exp == 0x7f800000)
         return uf;
-    // norm
     exp += 0x00800000;
-    // large number becomes inf
     if (exp == 0x7f800000)
         frac = 0;
     return sign | exp | frac;
@@ -312,7 +308,16 @@ unsigned floatScale2(unsigned uf) {
  *   Rating: 4
  */
 int floatFloat2Int(unsigned uf) {
-  return 2;
+  int sign = uf >> 31, exp = ((uf >> 23) & 0xff) - 127, frac = (uf & 0x007fffff) | 0x00800000, value = 0;
+    if (exp < 0)
+        return 0;
+    if (exp > 30)
+        return 0x80000000;
+    if (exp < 23)
+        value = frac >> (23 - exp);
+    else if (exp > 23)
+        value = frac << (exp - 23);
+    return sign ? -value : value;
 }
 /* 
  * floatPower2 - Return bit-level equivalent of the expression 2.0^x
