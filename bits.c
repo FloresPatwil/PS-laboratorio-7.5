@@ -262,7 +262,15 @@ int logicalNeg(int x) {
  *  Rating: 4
  */
 int howManyBits(int x) {
-  return 0;
+  int n = 0;
+  x = x ^ (x >> 31);
+  n = n + ((!!(x >> (n + 16))) << 4);
+  n = n + ((!!(x >> (n + 8))) << 3);
+  n = n + ((!!(x >> (n + 4))) << 2);
+  n = n + ((!!(x >> (n + 2))) << 1);
+  n = n + ((!!(x >> (n + 1))));
+  n = n + (x >> n);
+  return n + 1;;
 }
 //float
 /* 
